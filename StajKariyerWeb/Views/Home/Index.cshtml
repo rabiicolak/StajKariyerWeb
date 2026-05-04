@@ -1,87 +1,90 @@
-﻿@{
+@{
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="hero-section rounded-4 shadow-sm p-5 p-lg-6 mb-5 text-center text-white">
+<div class="hero-section text-center">
     <div class="container">
-        <span class="badge bg-light text-primary px-3 py-2 mb-3 fs-6">Akıllı Web Platformu</span>
-        <h1 class="display-4 fw-bold mb-3">Akıllı Staj ve Kariyer Eşleştirme Sistemi</h1>
-        <p class="lead mb-4 hero-subtext">
-            Öğrencilerin akademik ve teknik profillerine göre uygun kariyer alanı tahmini yapan ve
-            en uygun firmaları öneren modern web tabanlı eşleştirme platformu.
+        <div class="fade-in-up">
+            <span class="hero-badge">✨ Yeni Nesil Eşleştirme Algoritması</span>
+        </div>
+        <h1 class="hero-title fade-in-up delay-1">
+            Geleceğin Kariyerine <br />
+            <span>Adım At.</span>
+        </h1>
+        <p class="hero-text fade-in-up delay-2">
+            Öğrencilerin akademik ve teknik profillerine göre uygun kariyer alanı tahmini yapan ve en uygun firmaları öneren yapay zeka destekli platform.
         </p>
 
-        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-            <a href="/Account/Login" class="btn btn-light btn-lg px-4 fw-semibold">Giriş Yap</a>
-            <a href="/Account/Register" class="btn btn-outline-light btn-lg px-4 fw-semibold">Kayıt Ol</a>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 fade-in-up delay-3">
+            <a href="/Account/Register" class="btn-primary-custom text-decoration-none">Hemen Başla</a>
+            <a href="/Account/Login" class="btn-outline-custom text-decoration-none">Sisteme Giriş</a>
         </div>
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    <div class="col-md-4">
-        <div class="feature-card h-100 p-4 shadow-sm">
-            <div class="icon-circle mb-3">🎯</div>
-            <h4 class="fw-bold mb-3">Kariyer Tahmini</h4>
-            <p class="text-muted mb-0">
-                Öğrencinin ilgi alanı, proje deneyimi ve teknik becerileri analiz edilerek
-                en uygun kariyer alanı tahmin edilir.
-            </p>
+<div class="container pb-5">
+    <div class="row g-4 mb-5">
+        <div class="col-md-4 fade-in-up delay-1">
+            <div class="feature-card">
+                <div class="icon-wrapper">🎯</div>
+                <h4 class="feature-title">Nokta Atışı Tahmin</h4>
+                <p class="feature-text">
+                    İlgi alanların, proje deneyimin ve teknik becerilerin analiz edilerek senin için en uygun kariyer rotası saniyeler içinde çizilir.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4 fade-in-up delay-2">
+            <div class="feature-card">
+                <div class="icon-wrapper">🏢</div>
+                <h4 class="feature-title">Akıllı Firma Eşleşmesi</h4>
+                <p class="feature-text">
+                    Belirlenen kariyer alanına ve senin yetkinlik seviyene en çok uyan firmalar özel bir algoritmayla puanlanır ve sana önerilir.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4 fade-in-up delay-3">
+            <div class="feature-card">
+                <div class="icon-wrapper">⚡</div>
+                <h4 class="feature-title">Süper Hızlı Deneyim</h4>
+                <p class="feature-text">
+                    Modern, akıcı ve kullanıcı dostu arayüz sayesinde hiçbir karmaşa yaşamadan doğrudan sonuca ulaşırsın.
+                </p>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="feature-card h-100 p-4 shadow-sm">
-            <div class="icon-circle mb-3">🏢</div>
-            <h4 class="fw-bold mb-3">Firma Eşleştirme</h4>
-            <p class="text-muted mb-0">
-                Tahmin edilen kariyer alanına ve yetkinlik seviyelerine göre firmalar puanlanır,
-                en uygun seçenekler önerilir.
-            </p>
+    <div class="row align-items-center g-5 mb-5 mt-4">
+        <div class="col-lg-6 fade-in-up delay-2">
+            <div class="info-box">
+                <h2 class="feature-title fs-2 mb-4">Neden StajKariyerWeb?</h2>
+                <p class="feature-text mb-4">
+                    Geleneksel başvuru süreçlerinde binlerce seçenek arasında kaybolmak çok kolay. Hangi alana uygun olduğunu ve hangi firmanın kültürüne uyacağını bilmek çoğu zaman deneme yanılma gerektirir.
+                </p>
+                <p class="feature-text mb-0">
+                    Biz bu süreci <strong>veri odaklı</strong> bir hale getiriyoruz. Sen sadece kendini anlatıyorsun, gerisini algoritmamıza bırakıyorsun.
+                </p>
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="feature-card h-100 p-4 shadow-sm">
-            <div class="icon-circle mb-3">⚡</div>
-            <h4 class="fw-bold mb-3">Hızlı ve Kolay Kullanım</h4>
-            <p class="text-muted mb-0">
-                Kullanıcı dostu arayüz ile öğrenciler bilgilerini girerek saniyeler içinde
-                kişiselleştirilmiş öneriler alabilir.
-            </p>
-        </div>
-    </div>
-</div>
-
-<div class="row align-items-center g-4 mb-5">
-    <div class="col-lg-6">
-        <div class="info-box p-4 p-lg-5 shadow-sm">
-            <h2 class="fw-bold mb-3">Neden Bu Sistem?</h2>
-            <p class="text-muted">
-                Geleneksel başvuru süreçlerinde öğrenciler çoğu zaman hangi alana daha uygun olduklarını
-                ve hangi firmalara başvurmaları gerektiğini net olarak bilemezler.
-            </p>
-            <p class="text-muted mb-0">
-                Bu sistem, veri odaklı tahmin ve eşleştirme yaklaşımı ile öğrencilere daha bilinçli
-                kariyer kararları alma konusunda destek sağlar.
-            </p>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="stats-box p-4 p-lg-5 shadow-sm">
-            <div class="row text-center g-4">
-                <div class="col-4">
-                    <h2 class="fw-bold text-primary mb-1">AI</h2>
-                    <p class="text-muted mb-0 small">Tahmin Destekli</p>
+        <div class="col-lg-6 fade-in-up delay-3">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">AI</div>
+                    <div class="stat-label">Tahmin Motoru</div>
                 </div>
-                <div class="col-4">
-                    <h2 class="fw-bold text-primary mb-1">Web</h2>
-                    <p class="text-muted mb-0 small">Kullanım Kolaylığı</p>
+                <div class="stat-item">
+                    <div class="stat-value">7/24</div>
+                    <div class="stat-label">Kesintisiz Erişim</div>
                 </div>
-                <div class="col-4">
-                    <h2 class="fw-bold text-primary mb-1">API</h2>
-                    <p class="text-muted mb-0 small">Backend Entegrasyonu</p>
+                <div class="stat-item">
+                    <div class="stat-value">%100</div>
+                    <div class="stat-label">Veri Odaklı</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">API</div>
+                    <div class="stat-label">Hızlı Entegrasyon</div>
                 </div>
             </div>
         </div>

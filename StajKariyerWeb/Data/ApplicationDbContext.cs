@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StajKariyerWeb.Models;
 
 namespace StajKariyerWeb.Data
 {
@@ -9,5 +10,7 @@ namespace StajKariyerWeb.Data
             : base(options)
         {
         }
+
+        public DbSet<PredictionHistory> PredictionHistories { get; set; }
     }
 }
