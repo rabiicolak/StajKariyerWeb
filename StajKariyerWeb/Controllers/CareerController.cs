@@ -12,9 +12,9 @@ namespace StajKariyerWeb.Controllers
     {
         private readonly ApiService _apiService;
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CareerController(ApiService apiService, ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CareerController(ApiService apiService, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _apiService = apiService;
             _context = context;

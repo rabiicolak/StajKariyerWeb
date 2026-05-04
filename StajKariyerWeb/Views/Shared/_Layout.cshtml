@@ -34,10 +34,16 @@
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
+                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/Career/Index">Kariyer Eşleştirme</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Career/History">Geçmiş Tahminlerim</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Members/Index">Üyeler</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Account/Profile">Hesabım</a>

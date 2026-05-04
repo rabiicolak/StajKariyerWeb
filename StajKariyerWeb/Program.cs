@@ -2,15 +2,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StajKariyerWeb.Data;
 using StajKariyerWeb.Services;
+using StajKariyerWeb.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Veritabaný baðlantýsý
+// Veritabani baglantisi
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;

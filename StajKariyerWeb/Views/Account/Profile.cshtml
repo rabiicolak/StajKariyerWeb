@@ -1,35 +1,76 @@
 @using Microsoft.AspNetCore.Identity
-@model IdentityUser
+@model StajKariyerWeb.Models.ApplicationUser
 
 @{
     ViewData["Title"] = "Hesabım";
 }
 
 <div class="row justify-content-center mt-5 mb-5 fade-in-up">
-    <div class="col-md-6 col-lg-5">
+    <div class="col-md-8 col-lg-7">
         <div class="feature-card shadow-lg p-sm-4 text-center" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
-            <div class="icon-wrapper mx-auto mb-4" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.05);">
-                👤
-            </div>
             
-            <h2 class="fw-bold text-white mb-2" style="background: linear-gradient(to right, #ffffff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kullanıcı Profili</h2>
-            <p class="text-muted mb-4" style="color: #94a3b8 !important;">Kariyer asistanı hesabınıza ait detaylar</p>
-
-            <div class="p-4 text-start mb-4" style="background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                <div class="mb-3">
-                    <span class="d-block text-muted mb-1" style="font-size: 0.9rem; color: #94a3b8 !important;">E-posta Adresi</span>
-                    <strong class="text-white fs-5">@Model?.Email</strong>
+            @if (!string.IsNullOrEmpty(Model.ProfilePhotoPath))
+            {
+                <div class="mx-auto mb-4" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(103, 232, 249, 0.5); box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);">
+                    <img src="@Model.ProfilePhotoPath" alt="Profil Fotoğrafı" style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
-                <div>
-                    <span class="d-block text-muted mb-1" style="font-size: 0.9rem; color: #94a3b8 !important;">Hesap Durumu</span>
-                    <span class="badge bg-success px-3 py-2">Aktif</span>
+            }
+            else
+            {
+                <div class="icon-wrapper mx-auto mb-4" style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2)); display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 1px solid rgba(255, 255, 255, 0.05);">
+                    👤
+                </div>
+            }
+            
+            <h2 class="fw-bold text-white mb-1" style="background: linear-gradient(to right, #ffffff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">@(string.IsNullOrEmpty(Model.FullName) ? "Kullanıcı Profili" : Model.FullName)</h2>
+            <p class="text-muted mb-4" style="color: #94a3b8 !important;">@Model.Email</p>
+
+            @if (!string.IsNullOrEmpty(Model.ShortDescription))
+            {
+                <div class="p-3 mb-4 mx-auto" style="background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); max-width: 80%;">
+                    <p class="mb-0 text-light" style="font-size: 0.95rem; font-style: italic;">"@Model.ShortDescription"</p>
+                </div>
+            }
+
+            <div class="row text-start mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 h-100" style="background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span class="d-block text-muted mb-1" style="font-size: 0.85rem; color: #94a3b8 !important;">Telefon</span>
+                        <strong class="text-white">@(string.IsNullOrEmpty(Model.Phone) ? "-" : Model.Phone)</strong>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 h-100" style="background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span class="d-block text-muted mb-1" style="font-size: 0.85rem; color: #94a3b8 !important;">Şehir</span>
+                        <strong class="text-white">@(string.IsNullOrEmpty(Model.City) ? "-" : Model.City)</strong>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 h-100" style="background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span class="d-block text-muted mb-1" style="font-size: 0.85rem; color: #94a3b8 !important;">Üniversite</span>
+                        <strong class="text-white">@(string.IsNullOrEmpty(Model.University) ? "-" : Model.University)</strong>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 h-100" style="background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span class="d-block text-muted mb-1" style="font-size: 0.85rem; color: #94a3b8 !important;">Bölüm</span>
+                        <strong class="text-white">@(string.IsNullOrEmpty(Model.Department) ? "-" : Model.Department)</strong>
+                    </div>
                 </div>
             </div>
 
-            <div class="d-flex gap-3 justify-content-center">
-                <a href="/Career/History" class="btn-primary-custom text-decoration-none">Geçmiş Tahminlerim</a>
+            @if (!string.IsNullOrEmpty(Model.CVPath))
+            {
+                <div class="mb-4 text-center">
+                    <a href="@Model.CVPath" target="_blank" class="btn btn-outline-info px-4 py-2" style="border-radius: 12px;">📄 Özgeçmişi (CV) Görüntüle / İndir</a>
+                </div>
+            }
+
+            <div class="d-flex flex-wrap gap-3 justify-content-center mt-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                <a href="/Account/EditProfile" class="btn-primary-custom text-decoration-none">Profili Düzenle</a>
+                <a href="/Career/History" class="btn btn-outline-light text-decoration-none px-4" style="border-radius: 12px; padding: 0.8rem 1rem;">Geçmiş Tahminlerim</a>
                 <form asp-action="Logout" asp-controller="Account" method="post" class="m-0">
-                    <button type="submit" class="btn-outline-custom text-decoration-none" style="border-color: rgba(220, 53, 69, 0.5); color: #ffb3b8;">Çıkış Yap</button>
+                    <button type="submit" class="btn btn-outline-danger px-4" style="border-radius: 12px; padding: 0.8rem 1rem; border-color: rgba(220, 53, 69, 0.5);">Çıkış Yap</button>
                 </form>
             </div>
         </div>

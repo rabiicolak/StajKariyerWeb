@@ -1,0 +1,121 @@
+@model StajKariyerWeb.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profili Düzenle";
+}
+
+<style>
+    .custom-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .custom-input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #67e8f9;
+        color: #fff;
+        box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25);
+    }
+    .custom-input::placeholder {
+        color: #94a3b8;
+    }
+    .form-label {
+        color: #cbd5e1;
+        font-weight: 500;
+    }
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+</style>
+
+<div class="row justify-content-center mt-5 mb-5 fade-in-up">
+    <div class="col-md-8 col-lg-7">
+        <div class="feature-card shadow-lg p-sm-4">
+            <div class="card-body">
+                <div class="card-icon">✏️</div>
+                <h2 class="text-center fw-bold hero-title fs-3 mb-2" style="background: linear-gradient(to right, #ffffff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Profili Düzenle</h2>
+                <p class="text-center text-muted mb-4" style="color: #94a3b8 !important;">Kişisel ve kariyer bilgilerinizi güncelleyin.</p>
+
+                <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="color: #ffb3b8 !important;"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control custom-input" placeholder="Ad Soyad" />
+                            <span asp-validation-for="FullName" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Phone" class="form-label"></label>
+                            <input asp-for="Phone" class="form-control custom-input" placeholder="Telefon Numarası" />
+                            <span asp-validation-for="Phone" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label asp-for="City" class="form-label"></label>
+                            <input asp-for="City" class="form-control custom-input" placeholder="Şehir" />
+                            <span asp-validation-for="City" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label asp-for="University" class="form-label"></label>
+                            <input asp-for="University" class="form-control custom-input" placeholder="Üniversite" />
+                            <span asp-validation-for="University" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label asp-for="Department" class="form-label"></label>
+                            <input asp-for="Department" class="form-control custom-input" placeholder="Bölüm" />
+                            <span asp-validation-for="Department" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ShortDescription" class="form-label"></label>
+                        <textarea asp-for="ShortDescription" class="form-control custom-input" rows="3" placeholder="Kendinizden kısaca bahsedin..."></textarea>
+                        <span asp-validation-for="ShortDescription" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="ProfilePhoto" class="form-label"></label>
+                            <input asp-for="ProfilePhoto" type="file" class="form-control custom-input" accept=".jpg,.jpeg,.png" />
+                            <span asp-validation-for="ProfilePhoto" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                            @if (!string.IsNullOrEmpty(Model.ExistingProfilePhotoPath))
+                            {
+                                <div class="mt-2 text-muted" style="font-size: 0.85rem;">Mevcut Fotoğraf Yüklü</div>
+                            }
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="CVFile" class="form-label"></label>
+                            <input asp-for="CVFile" type="file" class="form-control custom-input" accept=".pdf,.doc,.docx" />
+                            <span asp-validation-for="CVFile" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                            @if (!string.IsNullOrEmpty(Model.ExistingCVPath))
+                            {
+                                <div class="mt-2 text-muted" style="font-size: 0.85rem;">Mevcut CV Yüklü</div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a href="/Account/Profile" class="btn btn-outline-secondary px-4" style="border-radius: 12px; padding: 0.8rem 1rem; color: #cbd5e1; border-color: rgba(255,255,255,0.2);">İptal</a>
+                        <button type="submit" class="btn-primary-custom px-4">Değişiklikleri Kaydet</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
