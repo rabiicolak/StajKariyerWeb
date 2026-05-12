@@ -1,92 +1,193 @@
+@model StajKariyerWeb.Models.HomeDashboardViewModel
 @{
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="hero-section text-center">
-    <div class="container">
-        <div class="fade-in-up">
-            <span class="hero-badge">✨ Yeni Nesil Eşleştirme Algoritması</span>
-        </div>
-        <h1 class="hero-title fade-in-up delay-1">
-            Geleceğin Kariyerine <br />
-            <span>Adım At.</span>
-        </h1>
-        <p class="hero-text fade-in-up delay-2">
-            Öğrencilerin akademik ve teknik profillerine göre uygun kariyer alanı tahmini yapan ve en uygun firmaları öneren yapay zeka destekli platform.
-        </p>
+@if (User.Identity != null && User.Identity.IsAuthenticated && Model != null)
+{
+    <div class="container pb-5 fade-in-up">
+        <h2 class="mb-4 fw-bold">Merhaba @Model.FullName, <span style="color: var(--secondary-color);">tekrar hoş geldin! 👋</span></h2>
+        
+        <div class="row g-4">
+            <!-- Left Side: Stats and Actions -->
+            <div class="col-lg-8">
+                
+                <!-- Stats Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="feature-card p-4 text-center">
+                            <div class="fs-1 mb-2">🎯</div>
+                            <h3 class="stat-value" style="font-size: 2rem;">@Model.TotalPredictions</h3>
+                            <div class="stat-label">Toplam Tahmin Sayısı</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card p-4 text-center">
+                            <div class="fs-1 mb-2">📊</div>
+                            <h3 class="stat-value" style="font-size: 2rem;">%@Model.ProfileCompletionPercentage</h3>
+                            <div class="stat-label">Profil Tamamlama Yüzdesi</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card p-4 text-center">
+                            <div class="fs-1 mb-2">💼</div>
+                            <h3 class="stat-value" style="font-size: 1.5rem; background: linear-gradient(to right, #f472b6, #fb7185); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">@Model.MostRecommendedCareer</h3>
+                            <div class="stat-label">En Çok Önerilen Kariyer</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card p-4 text-center">
+                            <div class="fs-1 mb-2">⏱️</div>
+                            <h3 class="stat-value" style="font-size: 1.5rem; background: linear-gradient(to right, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">@(Model.LastPredictionDate.HasValue ? Model.LastPredictionDate.Value.ToString("dd.MM.yyyy") : "Bilinmiyor")</h3>
+                            <div class="stat-label">Son Tahmin Tarihi</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 fade-in-up delay-3">
-            <a href="/Account/Register" class="btn-primary-custom text-decoration-none">Hemen Başla</a>
-            <a href="/Account/Login" class="btn-outline-custom text-decoration-none">Sisteme Giriş</a>
+                <!-- Quick Actions -->
+                <div class="info-box p-4">
+                    <h4 class="mb-4 fw-bold">Hızlı İşlemler</h4>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="/Career/Index" class="btn-primary-custom text-decoration-none text-center flex-grow-1">✨ Yeni Tahmin Yap</a>
+                        <a href="/Career/History" class="btn-outline-custom text-decoration-none text-center flex-grow-1">🕒 Geçmiş Tahminler</a>
+                        <a href="/Account/Profile" class="btn-outline-custom text-decoration-none text-center flex-grow-1">⚙️ Profilimi Düzenle</a>
+                        <a href="/Members/Index" class="btn-outline-custom text-decoration-none text-center flex-grow-1">👥 Üyeleri Gör</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Recommended Members -->
+            <div class="col-lg-4">
+                <div class="info-box p-4 h-100">
+                    <h4 class="mb-4 fw-bold">Önerilen Üyeler</h4>
+                    
+                    @if (Model.RecommendedMembers != null && Model.RecommendedMembers.Any())
+                    {
+                        <div class="d-flex flex-column gap-3">
+                            @foreach (var member in Model.RecommendedMembers)
+                            {
+                                <div class="d-flex align-items-center p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; transition: transform 0.2s;">
+                                    @if (!string.IsNullOrEmpty(member.ProfilePhotoPath))
+                                    {
+                                        <img src="@member.ProfilePhotoPath" alt="Profil" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); font-size: 1.5rem;">
+                                            👤
+                                        </div>
+                                    }
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0 fw-bold">@(member.FullName ?? member.UserName)</h6>
+                                        <small class="text-muted" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">@(member.Department ?? "Bölüm Belirtilmemiş")</small>
+                                    </div>
+                                    <a href="/Members/Index" class="btn btn-sm btn-outline-light rounded-circle" title="Profile Git">
+                                        <span style="font-size: 0.8rem;">👉</span>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="/Members/Index" class="text-decoration-none text-info" style="font-size: 0.9rem;">Tümünü Gör →</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Şu an önerilecek üye bulunmuyor.</p>
+                    }
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="container pb-5">
-    <div class="row g-4 mb-5">
-        <div class="col-md-4 fade-in-up delay-1">
-            <div class="feature-card">
-                <div class="icon-wrapper">🎯</div>
-                <h4 class="feature-title">Nokta Atışı Tahmin</h4>
-                <p class="feature-text">
-                    İlgi alanların, proje deneyimin ve teknik becerilerin analiz edilerek senin için en uygun kariyer rotası saniyeler içinde çizilir.
-                </p>
+}
+else
+{
+    <div class="hero-section text-center">
+        <div class="container">
+            <div class="fade-in-up">
+                <span class="hero-badge">✨ Yeni Nesil Eşleştirme Algoritması</span>
             </div>
-        </div>
+            <h1 class="hero-title fade-in-up delay-1">
+                Geleceğin Kariyerine <br />
+                <span>Adım At.</span>
+            </h1>
+            <p class="hero-text fade-in-up delay-2">
+                Öğrencilerin akademik ve teknik profillerine göre uygun kariyer alanı tahmini yapan ve en uygun firmaları öneren yapay zeka destekli platform.
+            </p>
 
-        <div class="col-md-4 fade-in-up delay-2">
-            <div class="feature-card">
-                <div class="icon-wrapper">🏢</div>
-                <h4 class="feature-title">Akıllı Firma Eşleşmesi</h4>
-                <p class="feature-text">
-                    Belirlenen kariyer alanına ve senin yetkinlik seviyene en çok uyan firmalar özel bir algoritmayla puanlanır ve sana önerilir.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-md-4 fade-in-up delay-3">
-            <div class="feature-card">
-                <div class="icon-wrapper">⚡</div>
-                <h4 class="feature-title">Süper Hızlı Deneyim</h4>
-                <p class="feature-text">
-                    Modern, akıcı ve kullanıcı dostu arayüz sayesinde hiçbir karmaşa yaşamadan doğrudan sonuca ulaşırsın.
-                </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 fade-in-up delay-3">
+                <a href="/Account/Register" class="btn-primary-custom text-decoration-none">Hemen Başla</a>
+                <a href="/Account/Login" class="btn-outline-custom text-decoration-none">Sisteme Giriş</a>
             </div>
         </div>
     </div>
 
-    <div class="row align-items-center g-5 mb-5 mt-4">
-        <div class="col-lg-6 fade-in-up delay-2">
-            <div class="info-box">
-                <h2 class="feature-title fs-2 mb-4">Neden StajKariyerWeb?</h2>
-                <p class="feature-text mb-4">
-                    Geleneksel başvuru süreçlerinde binlerce seçenek arasında kaybolmak çok kolay. Hangi alana uygun olduğunu ve hangi firmanın kültürüne uyacağını bilmek çoğu zaman deneme yanılma gerektirir.
-                </p>
-                <p class="feature-text mb-0">
-                    Biz bu süreci <strong>veri odaklı</strong> bir hale getiriyoruz. Sen sadece kendini anlatıyorsun, gerisini algoritmamıza bırakıyorsun.
-                </p>
+    <div class="container pb-5">
+        <div class="row g-4 mb-5">
+            <div class="col-md-4 fade-in-up delay-1">
+                <div class="feature-card">
+                    <div class="icon-wrapper">🎯</div>
+                    <h4 class="feature-title">Nokta Atışı Tahmin</h4>
+                    <p class="feature-text">
+                        İlgi alanların, proje deneyimin ve teknik becerilerin analiz edilerek senin için en uygun kariyer rotası saniyeler içinde çizilir.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 fade-in-up delay-2">
+                <div class="feature-card">
+                    <div class="icon-wrapper">🏢</div>
+                    <h4 class="feature-title">Akıllı Firma Eşleşmesi</h4>
+                    <p class="feature-text">
+                        Belirlenen kariyer alanına ve senin yetkinlik seviyene en çok uyan firmalar özel bir algoritmayla puanlanır ve sana önerilir.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 fade-in-up delay-3">
+                <div class="feature-card">
+                    <div class="icon-wrapper">⚡</div>
+                    <h4 class="feature-title">Süper Hızlı Deneyim</h4>
+                    <p class="feature-text">
+                        Modern, akıcı ve kullanıcı dostu arayüz sayesinde hiçbir karmaşa yaşamadan doğrudan sonuca ulaşırsın.
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="col-lg-6 fade-in-up delay-3">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value">AI</div>
-                    <div class="stat-label">Tahmin Motoru</div>
+        <div class="row align-items-center g-5 mb-5 mt-4">
+            <div class="col-lg-6 fade-in-up delay-2">
+                <div class="info-box">
+                    <h2 class="feature-title fs-2 mb-4">Neden StajKariyerWeb?</h2>
+                    <p class="feature-text mb-4">
+                        Geleneksel başvuru süreçlerinde binlerce seçenek arasında kaybolmak çok kolay. Hangi alana uygun olduğunu ve hangi firmanın kültürüne uyacağını bilmek çoğu zaman deneme yanılma gerektirir.
+                    </p>
+                    <p class="feature-text mb-0">
+                        Biz bu süreci <strong>veri odaklı</strong> bir hale getiriyoruz. Sen sadece kendini anlatıyorsun, gerisini algoritmamıza bırakıyorsun.
+                    </p>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">7/24</div>
-                    <div class="stat-label">Kesintisiz Erişim</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">%100</div>
-                    <div class="stat-label">Veri Odaklı</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">API</div>
-                    <div class="stat-label">Hızlı Entegrasyon</div>
+            </div>
+
+            <div class="col-lg-6 fade-in-up delay-3">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">AI</div>
+                        <div class="stat-label">Tahmin Motoru</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">7/24</div>
+                        <div class="stat-label">Kesintisiz Erişim</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">%100</div>
+                        <div class="stat-label">Veri Odaklı</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">API</div>
+                        <div class="stat-label">Hızlı Entegrasyon</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}

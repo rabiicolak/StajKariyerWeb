@@ -1,0 +1,97 @@
+@model StajKariyerWeb.Models.CompanyProfile
+
+@{
+    ViewData["Title"] = Model.Name + " - Firma Profili";
+}
+
+<div class="container mt-5 mb-5 fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <a href="/Companies/Index" class="btn btn-outline-light mb-4" style="border-radius: 8px;">
+                <i class="me-2">←</i> Firmalara Dön
+            </a>
+
+            <div class="feature-card shadow-lg">
+                <div class="card-body p-sm-5">
+                    
+                    <div class="d-flex flex-column flex-md-row align-items-md-center mb-5 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div class="company-logo-wrapper mb-4 mb-md-0 me-md-4" style="width: 120px; height: 120px; border-radius: 20px; overflow: hidden; border: 3px solid rgba(103, 232, 249, 0.4); background: #1e1e2f; display: flex; align-items: center; justify-content: center; font-size: 3rem; flex-shrink: 0;">
+                            @if (!string.IsNullOrEmpty(Model.LogoPath))
+                            {
+                                <img src="@Model.LogoPath" alt="@Model.Name" style="width: 100%; height: 100%; object-fit: contain; background: white;" />
+                            }
+                            else
+                            {
+                                <span>🏢</span>
+                            }
+                        </div>
+                        
+                        <div>
+                            <h2 class="fw-bold hero-title fs-1 mb-2" style="background: linear-gradient(to right, #ffffff, #67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">@Model.Name</h2>
+                            
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                @if (!string.IsNullOrEmpty(Model.Sector))
+                                {
+                                    <span class="badge" style="background: rgba(79, 70, 229, 0.2); color: #a5b4fc; border: 1px solid rgba(79, 70, 229, 0.3); padding: 0.5em 1em;">@Model.Sector</span>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.City))
+                                {
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.5em 1em;">📍 @Model.City</span>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.RelatedArea))
+                                {
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.5em 1em;">🎯 Hedef: @Model.RelatedArea</span>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.WebsiteUrl))
+                            {
+                                <a href="@Model.WebsiteUrl" target="_blank" class="btn btn-sm" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                                    🌐 Web Sitesini Ziyaret Et
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row g-5">
+                        <div class="col-md-7">
+                            <h4 class="fw-bold mb-3" style="color: #f8fafc;">Firma Hakkında</h4>
+                            <p class="fs-5" style="color: #cbd5e1; line-height: 1.8;">
+                                @(string.IsNullOrEmpty(Model.Description) ? "Bu firma henüz bir açıklama eklememiş." : Model.Description)
+                            </p>
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="p-4 rounded" style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); box-shadow: 0 0 15px rgba(6, 182, 212, 0.05);">
+                                <h5 class="fw-bold mb-3" style="color: #67e8f9;">💡 Aranan Yetkinlikler</h5>
+                                
+                                @if (!string.IsNullOrEmpty(Model.RequiredSkills))
+                                {
+                                    <ul class="ps-3 mb-0" style="color: #f8fafc; line-height: 1.8;">
+                                        @foreach(var skill in Model.RequiredSkills.Split(','))
+                                        {
+                                            <li style="margin-bottom: 0.5rem;">@skill.Trim()</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="mb-0 fst-italic" style="color: #cbd5e1;">Henüz yetkinlik bilgisi girilmedi.</p>
+                                }
+                            </div>
+
+                            <div class="mt-4 p-4 rounded" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); box-shadow: 0 0 15px rgba(245, 158, 11, 0.05);">
+                                <h5 class="fw-bold mb-2" style="color: #fbbf24;">🎯 Kariyer Önerisi</h5>
+                                <p class="mb-0" style="color: #cbd5e1; line-height: 1.6;">
+                                    Tahmin sonucunuz <strong style="color: #f8fafc;">@Model.RelatedArea</strong> alanıyla eşleşiyorsa, bu firmadaki staj veya iş ilanları sizin yetkinlik profilinizle yüksek oranda örtüşmektedir.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

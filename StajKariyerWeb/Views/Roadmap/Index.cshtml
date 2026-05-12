@@ -1,0 +1,188 @@
+@model StajKariyerWeb.Models.RoadmapViewModel
+
+@{
+    ViewData["Title"] = "Hedefe Göre Kariyer Yol Haritası";
+}
+
+<style>
+    .custom-input, .custom-select {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #f8fafc !important;
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .custom-input:focus, .custom-select:focus {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #67e8f9 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25) !important;
+    }
+    .custom-select option {
+        background: #0f172a;
+        color: #f8fafc;
+    }
+    .form-label {
+        color: #cbd5e1;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    .timeline {
+        position: relative;
+        padding-left: 3rem;
+        margin-top: 2rem;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 1.5rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: rgba(255,255,255,0.1);
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+    .timeline-badge {
+        position: absolute;
+        left: -3rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        z-index: 1;
+        border: 4px solid var(--bg-color);
+        transform: translateX(-50%);
+    }
+    .timeline-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        backdrop-filter: blur(10px);
+        transition: transform 0.2s;
+    }
+    .timeline-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="container mt-5 mb-5 fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <!-- Hedef Belirleme Formu -->
+            <div class="feature-card shadow-lg mb-5">
+                <div class="card-body p-sm-5">
+                    <div class="text-center mb-5">
+                        <div class="icon-wrapper mx-auto">🗺️</div>
+                        <h2 class="fw-bold hero-title fs-2 mb-2">Hedefine Giden Yolu Çiz</h2>
+                        <p class="text-muted">Alanını ve hedefini belirle, senin için en uygun adımları listeleyelim.</p>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #ffb3b8;">
+                            @Model.ErrorMessage
+                        </div>
+                    }
+
+                    <form asp-action="Index" method="post">
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="TargetArea" class="form-label">Hedef Alan</label>
+                                <select asp-for="TargetArea" asp-items="ViewBag.Areas" class="form-select custom-select">
+                                    <option value="">Alan seçiniz</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="TargetCompany" class="form-label">Hedef Firma</label>
+                                <select asp-for="TargetCompany" asp-items="ViewBag.Companies" class="form-select custom-select">
+                                    <option value="">Firma seçiniz</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="CurrentLevel" class="form-label">Mevcut Seviye</label>
+                                <select asp-for="CurrentLevel" asp-items="ViewBag.Levels" class="form-select custom-select">
+                                    <option value="">Seviye seçiniz</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="TargetRole" class="form-label">Hedef Pozisyon</label>
+                                <select asp-for="TargetRole" asp-items="ViewBag.Roles" class="form-select custom-select">
+                                    <option value="">Pozisyon seçiniz</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn-primary-custom px-5 py-3 fs-5 w-100">
+                                <i class="me-2">🚀</i> Yol Haritamı Oluştur
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sonuç Alanı -->
+            @if (Model.Steps != null && Model.Steps.Any())
+            {
+                <div class="feature-card shadow-lg mt-5 fade-in-up delay-1" id="roadmap-result">
+                    <div class="card-body p-sm-5">
+                        <div class="text-center mb-5">
+                            <h2 class="hero-title fs-2 mb-3">Kişisel Yol Haritan</h2>
+                            <p class="text-light fs-5">
+                                <span style="color: var(--secondary-color);">@Model.TargetCompany</span> şirketinde 
+                                <span style="color: var(--secondary-color);">@Model.TargetRole</span> olarak 
+                                <span style="color: var(--secondary-color);">@Model.TargetArea</span> alanında çalışmak için adımların:
+                            </p>
+                        </div>
+
+                        <div class="timeline">
+                            @for (int i = 0; i < Model.Steps.Count; i++)
+                            {
+                                var step = Model.Steps[i];
+                                <div class="timeline-item">
+                                    <div class="timeline-badge">@(i + 1)</div>
+                                    <div class="timeline-card">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="fw-bold text-light mb-0">@step.Title</h4>
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);">⏱️ @step.EstimatedTime</span>
+                                        </div>
+                                        <p class="text-muted mb-3">@step.Description</p>
+                                        
+                                        <div class="p-3 rounded" style="background: rgba(6, 182, 212, 0.1); border-left: 4px solid var(--secondary-color);">
+                                            <strong style="color: #67e8f9;">Aksiyon:</strong> <span class="text-light">@step.Action</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const resultEl = document.getElementById("roadmap-result");
+                        if (resultEl) {
+                            resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                </script>
+            }
+
+        </div>
+    </div>
+</div>
