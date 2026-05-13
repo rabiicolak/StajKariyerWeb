@@ -59,8 +59,8 @@ namespace StajKariyerWeb.Controllers
                             GNO = request.GNO.ToString(),
                             IlgiliAlan = request.Ilgili_Alan,
                             Proje = request.Proje,
-                            Prediction = result.Prediction,
-                            MatchedArea = result.MatchedArea
+                            Prediction = result.Tahmin,
+                            MatchedArea = result.FirmaEslesmeAlani
                         };
 
                         _context.PredictionHistories.Add(history);
@@ -69,7 +69,7 @@ namespace StajKariyerWeb.Controllers
                 }
 
                 ViewBag.Result = result;
-                ViewBag.Roadmap = GenerateRoadmap(result.Prediction, result.MatchedArea);
+                ViewBag.Roadmap = GenerateRoadmap(result.Tahmin, result.FirmaEslesmeAlani);
                 return View(request);
             }
             catch (Exception ex)

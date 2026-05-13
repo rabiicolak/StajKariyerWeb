@@ -1,0 +1,250 @@
+@model StajKariyerWeb.Models.CompanyDashboardViewModel
+
+@{
+    ViewData["Title"] = "Firma Dashboard - " + Model.Company.Name;
+}
+
+<div class="container mt-5 mb-5 fade-in-up">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div>
+            <h2 class="fw-bold hero-title fs-2 mb-1" style="background: linear-gradient(to right, #ffffff, #67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Firma Yönetim Paneli
+            </h2>
+            <p class="text-light opacity-75 mb-0">@Model.Company.Name yetenek havuzu</p>
+        </div>
+        <div class="d-none d-md-block">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.5em 1em; border: 1px solid rgba(16, 185, 129, 0.3);">
+                Aktif Paket: Premium
+            </span>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5 row-cols-1 row-cols-md-2 row-cols-xl-5">
+        <div class="col">
+            <div class="card border-0 h-100" style="background: rgba(59, 130, 246, 0.08); border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.2) !important;">
+                <div class="card-body p-4 text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📝</div>
+                    <h3 class="fw-bold text-white mb-1">@Model.JobApplications.Count</h3>
+                    <p class="text-primary mb-0" style="font-size: 0.9rem; color: #60a5fa !important;">Toplam Başvuru</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100" style="background: rgba(6, 182, 212, 0.08); border-radius: 16px; border: 1px solid rgba(6, 182, 212, 0.2) !important;">
+                <div class="card-body p-4 text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👥</div>
+                    <h3 class="fw-bold text-white mb-1">@Model.TotalSuitableStudents</h3>
+                    <p class="text-info mb-0" style="font-size: 0.9rem;">Toplam Aday</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100" style="background: rgba(16, 185, 129, 0.08); border-radius: 16px; border: 1px solid rgba(16, 185, 129, 0.2) !important;">
+                <div class="card-body p-4 text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
+                    <h3 class="fw-bold text-white mb-1">%@Model.HighestMatchScore</h3>
+                    <p class="text-success mb-0" style="font-size: 0.9rem;">En Yüksek Uyum</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100" style="background: rgba(245, 158, 11, 0.08); border-radius: 16px; border: 1px solid rgba(245, 158, 11, 0.2) !important;">
+                <div class="card-body p-4 text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📈</div>
+                    <h3 class="fw-bold text-white mb-1">%@Math.Round(Model.AverageMatchScore, 1)</h3>
+                    <p class="text-warning mb-0" style="font-size: 0.9rem;">Ortalama Uyum</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100" style="background: rgba(139, 92, 246, 0.08); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.2) !important;">
+                <div class="card-body p-4 text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</div>
+                    <h3 class="fw-bold text-white mb-1 text-truncate" title="@Model.MostMatchedSkill">@Model.MostMatchedSkill</h3>
+                    <p class="mb-0" style="color: #a78bfa; font-size: 0.9rem;">Sık Eşleşen</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 sticky-top" style="top: 100px; background: rgba(30, 30, 47, 0.8); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05) !important;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-white mb-4"><i class="me-2">🔍</i> Filtreler</h5>
+                    
+                    <form asp-action="Index" method="get">
+                        <input type="hidden" name="companyId" value="@Model.Company.Id" />
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-light opacity-75" style="font-size: 0.85rem;">Şehir</label>
+                            <input type="text" name="filterCity" value="@Model.FilterCity" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: İstanbul" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-light opacity-75" style="font-size: 0.85rem;">Bölüm</label>
+                            <input type="text" name="filterDepartment" value="@Model.FilterDepartment" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: Bilgisayar" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-light opacity-75" style="font-size: 0.85rem;">İlgili Alan / Anahtar Kelime</label>
+                            <input type="text" name="filterRelatedArea" value="@Model.FilterRelatedArea" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: Yazılım" />
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-light opacity-75" style="font-size: 0.85rem;">Minimum Skor: <span id="scoreVal">@(Model.FilterMinScore ?? 0)</span></label>
+                            <input type="range" name="filterMinScore" min="0" max="100" value="@(Model.FilterMinScore ?? 0)" class="form-range" oninput="document.getElementById('scoreVal').innerText = this.value" />
+                        </div>
+
+                        <button type="submit" class="btn w-100" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border: none; border-radius: 8px;">Sonuçları Filtrele</button>
+                        <a href="/CompanyDashboard/Index?companyId=@Model.Company.Id" class="btn btn-link text-light opacity-50 text-decoration-none w-100 mt-2" style="font-size: 0.85rem;">Filtreleri Temizle</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success mb-4" style="background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <!-- Gelen Başvurular -->
+            <div class="mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold text-white mb-0">Gelen Başvurular</h4>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        @Model.JobApplications.Count Başvuru
+                    </span>
+                </div>
+
+                @if (Model.JobApplications.Any())
+                {
+                    <div class="card border-0" style="background: rgba(30, 30, 47, 0.6); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05) !important; overflow: hidden;">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover mb-0" style="color: #cbd5e1;">
+                                <thead style="background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <tr>
+                                        <th class="py-3 px-4 fw-normal text-light opacity-75">Aday</th>
+                                        <th class="py-3 px-4 fw-normal text-light opacity-75">Eğitim & Şehir</th>
+                                        <th class="py-3 px-4 fw-normal text-light opacity-75">Tarih</th>
+                                        <th class="py-3 px-4 fw-normal text-light opacity-75 text-center">Durum</th>
+                                        <th class="py-3 px-4 fw-normal text-light opacity-75 text-end">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var app in Model.JobApplications)
+                                    {
+                                        var badgeClass = app.Status switch
+                                        {
+                                            "Beklemede" => "background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2);",
+                                            "İncelendi" => "background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2);",
+                                            "Kabul" => "background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);",
+                                            "Reddedildi" => "background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2);",
+                                            _ => "background: rgba(255,255,255,0.1); color: #fff;"
+                                        };
+
+                                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                            <td class="py-3 px-4 align-middle">
+                                                <div class="fw-bold text-white">@(app.Student?.FullName ?? app.Student?.UserName ?? "Bilinmiyor")</div>
+                                                @if (!string.IsNullOrEmpty(app.Student?.CVPath))
+                                                {
+                                                    <a href="@app.Student.CVPath" target="_blank" class="text-info text-decoration-none" style="font-size: 0.8rem;">📄 CV Göster</a>
+                                                }
+                                            </td>
+                                            <td class="py-3 px-4 align-middle" style="font-size: 0.85rem;">
+                                                <div>@app.Student?.University</div>
+                                                <div class="opacity-75">@app.Student?.Department</div>
+                                                <div class="opacity-50">@app.Student?.City</div>
+                                            </td>
+                                            <td class="py-3 px-4 align-middle" style="font-size: 0.85rem;">
+                                                @app.ApplicationDate.ToString("dd MMM yyyy")
+                                            </td>
+                                            <td class="py-3 px-4 align-middle text-center">
+                                                <span class="badge" style="@badgeClass font-weight: normal;">@app.Status</span>
+                                            </td>
+                                            <td class="py-3 px-4 align-middle text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px; font-size: 0.8rem;">
+                                                        Aksiyon
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" style="background: #1e1e2f; border: 1px solid rgba(255,255,255,0.1);">
+                                                        <li>
+                                                            <form asp-action="UpdateApplicationStatus" method="post">
+                                                                <input type="hidden" name="applicationId" value="@app.Id" />
+                                                                <input type="hidden" name="companyId" value="@Model.Company.Id" />
+                                                                <input type="hidden" name="newStatus" value="İncelendi" />
+                                                                <button type="submit" class="dropdown-item text-info">🔍 İncelendi Yap</button>
+                                                            </form>
+                                                        </li>
+                                                        <li>
+                                                            <form asp-action="UpdateApplicationStatus" method="post">
+                                                                <input type="hidden" name="applicationId" value="@app.Id" />
+                                                                <input type="hidden" name="companyId" value="@Model.Company.Id" />
+                                                                <input type="hidden" name="newStatus" value="Kabul" />
+                                                                <button type="submit" class="dropdown-item text-success">✅ Kabul Et</button>
+                                                            </form>
+                                                        </li>
+                                                        <li>
+                                                            <form asp-action="UpdateApplicationStatus" method="post">
+                                                                <input type="hidden" name="applicationId" value="@app.Id" />
+                                                                <input type="hidden" name="companyId" value="@Model.Company.Id" />
+                                                                <input type="hidden" name="newStatus" value="Reddedildi" />
+                                                                <button type="submit" class="dropdown-item text-danger">❌ Reddet</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-4 rounded text-center" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1);">
+                        <p class="text-light opacity-50 mb-0">Henüz firmaya yapılmış bir başvuru bulunmamaktadır.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Students List -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold text-white mb-0">Önerilen Adaylar</h4>
+                <div class="text-light opacity-50" style="font-size: 0.9rem;">
+                    @Model.SuitableStudents.Count aday listeleniyor
+                </div>
+            </div>
+
+            @if (Model.SuitableStudents.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var student in Model.SuitableStudents)
+                    {
+                        <div class="col-md-6">
+                            @await Html.PartialAsync("_StudentCardPartial", student)
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5 rounded" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🔍</div>
+                    <h5 class="text-white opacity-75">Kriterlerinize uygun aday bulunamadı.</h5>
+                    <p class="text-light opacity-50 mb-0">Filtreleri esneterek tekrar deneyebilirsiniz.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

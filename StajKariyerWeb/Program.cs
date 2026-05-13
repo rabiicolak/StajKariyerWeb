@@ -28,6 +28,7 @@ builder.Services.AddControllersWithViews();
 
 // API servisi
 builder.Services.AddHttpClient<ApiService>();
+builder.Services.AddScoped<IMatchService, MatchService>();
 
 var app = builder.Build();
 

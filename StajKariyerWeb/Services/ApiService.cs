@@ -30,7 +30,7 @@ namespace StajKariyerWeb.Services
             var json = JsonSerializer.Serialize(apiObject);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("http://127.0.0.1:8002/predict", content);
+            var response = await _httpClient.PostAsync("http://127.0.0.1:8000/predict", content);
 
             if (!response.IsSuccessStatusCode)
                 return null;

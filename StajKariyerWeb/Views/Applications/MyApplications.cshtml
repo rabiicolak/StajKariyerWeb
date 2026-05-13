@@ -1,0 +1,102 @@
+@model IEnumerable<StajKariyerWeb.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "Başvurularım";
+}
+
+<div class="container mt-5 mb-5 fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                    <h2 class="fw-bold hero-title fs-2 mb-1" style="background: linear-gradient(to right, #ffffff, #67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Başvurularım
+                    </h2>
+                    <p class="text-light opacity-75 mb-0">Firmalara yaptığın başvuruları buradan takip edebilirsin.</p>
+                </div>
+                <div>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 0.6em 1.2em; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 0.9rem;">
+                        Toplam: @Model.Count()
+                    </span>
+                </div>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var app in Model)
+                    {
+                        var badgeStyle = app.Status switch
+                        {
+                            "Beklemede" => "background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);",
+                            "İncelendi" => "background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);",
+                            "Kabul" => "background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);",
+                            "Reddedildi" => "background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);",
+                            _ => "background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2);"
+                        };
+
+                        <div class="col-md-6">
+                            <div class="p-4 h-100 d-flex flex-column position-relative" style="background: rgba(30, 30, 47, 0.6); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease;">
+
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="pe-4">
+                                        <h4 class="fw-bold text-white mb-2" style="font-size: 1.3rem;">
+                                            @(app.CompanyProfile?.Name ?? "Bilinmeyen Firma")
+                                        </h4>
+                                        <div class="d-flex gap-2 flex-wrap mb-2">
+                                            @if (!string.IsNullOrEmpty(app.CompanyProfile?.Sector))
+                                            {
+                                                <span class="badge" style="background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: normal; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1);">
+                                                    @app.CompanyProfile.Sector
+                                                </span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(app.CompanyProfile?.City))
+                                            {
+                                                <span class="badge" style="background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: normal; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1);">
+                                                    📍 @app.CompanyProfile.City
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(app.Note))
+                                {
+                                    <div class="mb-3 p-3 rounded" style="background: rgba(0,0,0,0.2); border-left: 3px solid rgba(255,255,255,0.1);">
+                                        <small class="text-light opacity-75">Not: @app.Note</small>
+                                    </div>
+                                }
+
+                                <div class="mt-auto pt-3" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="text-light opacity-50" style="font-size: 0.85rem;">
+                                            <i class="me-1">📅</i> @app.ApplicationDate.ToString("dd MMM yyyy, HH:mm")
+                                        </div>
+                                        <span class="badge px-3 py-2 fw-medium" style="@badgeStyle font-size: 0.85rem;">
+                                            @app.Status
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <a href="/Companies/Details/@app.CompanyProfileId" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5 rounded mt-4" style="background: rgba(30, 30, 47, 0.6); backdrop-filter: blur(10px); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1);">
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.4;">📝</div>
+                    <h4 class="text-white fw-bold mb-2">Henüz Bir Başvurunuz Yok</h4>
+                    <p class="text-light opacity-50 mb-4">Size uygun firmaları inceleyerek hemen başvurmaya başlayabilirsiniz.</p>
+                    <a href="/Companies/Index" class="btn px-4 py-2" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; border: none; border-radius: 8px; font-weight: 500; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">
+                        Firmaları Keşfet
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

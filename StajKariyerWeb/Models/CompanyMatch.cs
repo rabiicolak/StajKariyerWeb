@@ -1,19 +1,19 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace StajKariyerWeb.Models
 {
     public class CompanyMatch
     {
-        [JsonPropertyName("FİRMA")]
+        [JsonPropertyName("firma")]
         public string Firma { get; set; } = string.Empty;
 
-        [JsonPropertyName("Ilgili_Alan")]
-        public string IlgiliAlan { get; set; } = string.Empty;
+        [JsonPropertyName("alan")]
+        public string Alan { get; set; } = string.Empty;
 
-        [JsonPropertyName("Score")]
+        [JsonPropertyName("score")]
         public int Score { get; set; }
 
-        [JsonPropertyName("Durum")]
+        [JsonPropertyName("durum")]
         public string Durum { get; set; } = string.Empty;
     }
 }

@@ -14,6 +14,7 @@ namespace StajKariyerWeb.Data
 
         public DbSet<PredictionHistory> PredictionHistories { get; set; }
         public DbSet<CompanyProfile> CompanyProfiles { get; set; }
+        public DbSet<JobApplication> JobApplications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

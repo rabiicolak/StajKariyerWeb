@@ -4,16 +4,13 @@ namespace StajKariyerWeb.Models
 {
     public class PredictionResponse
     {
-        [JsonPropertyName("prediction")]
-        public string Prediction { get; set; } = string.Empty;
+        [JsonPropertyName("tahmin")]
+        public string Tahmin { get; set; } = string.Empty;
 
-        [JsonPropertyName("matched_area")]
-        public string MatchedArea { get; set; } = string.Empty;
+        [JsonPropertyName("firma_eslesme_alani")]
+        public string FirmaEslesmeAlani { get; set; } = string.Empty;
 
-        [JsonPropertyName("message")]
-        public string? Message { get; set; }
-
-        [JsonPropertyName("companies")]
-        public List<CompanyMatch> Companies { get; set; } = new();
+        [JsonPropertyName("onerilen_firmalar")]
+        public List<CompanyMatch> OnerilenFirmalar { get; set; } = new();
     }
 }

@@ -5,177 +5,103 @@
     ViewData["Title"] = "Akıllı Staj ve Kariyer Eşleştirme";
     var result = ViewBag.Result as PredictionResponse;
     var error = ViewBag.Error as string;
-    var message = result?.Message;
 }
-
-<style>
-    .custom-input, .custom-select {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #f8fafc !important;
-        border-radius: 12px;
-        padding: 0.8rem 1rem;
-        transition: all 0.3s ease;
-    }
-    .custom-input:focus, .custom-select:focus {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: #67e8f9 !important;
-        color: #fff !important;
-        box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25) !important;
-    }
-    .custom-select option {
-        background: #0f172a;
-        color: #f8fafc;
-    }
-    .custom-input::placeholder {
-        color: #94a3b8;
-    }
-    .form-label {
-        color: #cbd5e1;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-    .section-title {
-        color: #a5b4fc;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        margin-top: 1rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding-bottom: 0.5rem;
-    }
-    .result-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .result-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    .badge-score {
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 12px;
-    }
-</style>
 
 <div class="container mt-5 mb-5 fade-in-up">
     <div class="row justify-content-center">
         <div class="col-lg-10">
 
-            <div class="feature-card shadow-lg mb-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold hero-title mb-3" style="font-size: 2.5rem; background: linear-gradient(to right, #ffffff, #67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Yapay Zeka ile Kariyer Eşleştirme
+                </h1>
+                <p class="fs-5 text-light opacity-75">
+                    Yetkinliklerini gir, yapay zeka senin için en uygun kariyer alanını ve şirketleri bulsun.
+                </p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(error))
+            {
+                <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2);">
+                    @error
+                </div>
+            }
+
+            <div class="feature-card shadow-lg">
                 <div class="card-body p-sm-5">
-                    <div class="text-center mb-5">
-                        <div class="icon-wrapper mx-auto">🤖</div>
-                        <h2 class="fw-bold hero-title fs-2 mb-2">Yapay Zeka Destekli Kariyer Testi</h2>
-                        <p class="text-muted" style="color: #94a3b8 !important;">Yetkinliklerini gir, sana en uygun kariyer alanını ve şirketleri bulalım.</p>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(error))
-                    {
-                        <div class="alert alert-danger" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #ffb3b8;">
-                            @error
-                        </div>
-                    }
-
                     <form asp-action="Index" method="post">
                         
-                        <h4 class="section-title">Temel Bilgiler</h4>
-                        <div class="row g-4 mb-4">
+                        <div class="row g-4">
+                            <!-- GNO -->
                             <div class="col-md-6">
-                                <label asp-for="GNO" class="form-label">Genel Not Ortalaması (GNO)</label>
-                                <input asp-for="GNO" type="number" step="0.01" min="0" max="4" class="form-control custom-input" placeholder="Örn: 2.56 veya 3.40" />
+                                <label asp-for="GNO" class="form-label text-light fw-semibold">Genel Not Ortalaması (GNO)</label>
+                                <input asp-for="GNO" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: 3.5" step="0.01" />
                             </div>
 
+                            <!-- Ilgili_Alan -->
                             <div class="col-md-6">
-                                <label asp-for="Ilgili_Alan" class="form-label">İlgili Alan</label>
-                                <select asp-for="Ilgili_Alan" class="form-select custom-select">
-                                    <option value="">İlgili alan seçiniz</option>
-                                    <option>Yapay Zeka</option>
-                                    <option>Veri Bilimi</option>
-                                    <option>Web</option>
-                                    <option>Backend</option>
-                                    <option>Mobil</option>
-                                    <option>Siber Güvenlik</option>
-                                    <option>DevOps</option>
-                                    <option>Oyun Geliştirme</option>
+                                <label asp-for="Ilgili_Alan" class="form-label text-light fw-semibold">İlgilendiğin Alan</label>
+                                <select asp-for="Ilgili_Alan" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="" style="color: black;">Seçiniz...</option>
+                                    <option value="Web" style="color: black;">Web Geliştirme</option>
+                                    <option value="Mobil" style="color: black;">Mobil Geliştirme</option>
+                                    <option value="Veri_Bilimi" style="color: black;">Veri Bilimi</option>
+                                    <option value="Yapay_Zeka" style="color: black;">Yapay Zeka</option>
+                                    <option value="Siber_Guvenlik" style="color: black;">Siber Güvenlik</option>
+                                    <option value="Oyun" style="color: black;">Oyun Geliştirme</option>
                                 </select>
                             </div>
 
-                            <div class="col-12">
-                                <label asp-for="Proje" class="form-label">Proje Deneyimi</label>
-                                <select asp-for="Proje" class="form-select custom-select">
-                                    <option value="">Proje seçiniz</option>
-                                    <option>Chatbot Geliştirme</option>
-                                    <option>Veri Analizi Projesi</option>
-                                    <option>Web Sitesi Geliştirme</option>
-                                    <option>Mobil Uygulama Geliştirme</option>
-                                    <option>Oyun Geliştirme</option>
-                                    <option>Siber Güvenlik Aracı</option>
-                                    <option>Backend API Geliştirme</option>
-                                    <option>DevOps Otomasyon Projesi</option>
+                            <!-- Proje -->
+                            <div class="col-md-6">
+                                <label asp-for="Proje" class="form-label text-light fw-semibold">Daha Önce Proje Yaptın mı?</label>
+                                <select asp-for="Proje" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="1" style="color: black;">Evet</option>
+                                    <option value="0" style="color: black;">Hayır</option>
                                 </select>
+                            </div>
+
+                            <!-- Veritabani -->
+                            <div class="col-md-6">
+                                <label asp-for="Veritabani" class="form-label text-light fw-semibold">Veritabanı Bilgisi</label>
+                                <select asp-for="Veritabani" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="1" style="color: black;">Var</option>
+                                    <option value="0" style="color: black;">Yok</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <h5 class="fw-bold mb-3 text-light" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Programlama Dili Yetkinlikleri (0-100)</h5>
+                            </div>
+
+                            <!-- Python -->
+                            <div class="col-md-6">
+                                <label asp-for="Python" class="form-label text-light opacity-75">Python</label>
+                                <input asp-for="Python" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                            </div>
+
+                            <!-- Java -->
+                            <div class="col-md-6">
+                                <label asp-for="Java" class="form-label text-light opacity-75">Java</label>
+                                <input asp-for="Java" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                            </div>
+
+                            <!-- Csharp -->
+                            <div class="col-md-6">
+                                <label asp-for="Csharp" class="form-label text-light opacity-75">C#</label>
+                                <input asp-for="Csharp" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                            </div>
+
+                            <!-- Cpp -->
+                            <div class="col-md-6">
+                                <label asp-for="Cpp" class="form-label text-light opacity-75">C++</label>
+                                <input asp-for="Cpp" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
                             </div>
                         </div>
 
-                        <h4 class="section-title mt-5">Teknik Yetkinlikler (0-2 Arası Puanlama)</h4>
-                        <div class="row g-4 mb-5">
-                            <div class="col-md-4">
-                                <label asp-for="Veritabani" class="form-label">Veritabanı</label>
-                                <select asp-for="Veritabani" class="form-select custom-select">
-                                    <option value="">Seviye seçiniz</option>
-                                    <option value="0">0 - Temel / Başlangıç</option>
-                                    <option value="1">1 - Orta Seviye (Kullanabilir)</option>
-                                    <option value="2">2 - İleri Seviye (Uzman)</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="Python" class="form-label">Python</label>
-                                <select asp-for="Python" class="form-select custom-select">
-                                    <option value="">Seviye seçiniz</option>
-                                    <option value="0">0 - Temel / Başlangıç</option>
-                                    <option value="1">1 - Orta Seviye (Kullanabilir)</option>
-                                    <option value="2">2 - İleri Seviye (Uzman)</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="Java" class="form-label">Java</label>
-                                <select asp-for="Java" class="form-select custom-select">
-                                    <option value="">Seviye seçiniz</option>
-                                    <option value="0">0 - Temel / Başlangıç</option>
-                                    <option value="1">1 - Orta Seviye (Kullanabilir)</option>
-                                    <option value="2">2 - İleri Seviye (Uzman)</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Csharp" class="form-label">C#</label>
-                                <select asp-for="Csharp" class="form-select custom-select">
-                                    <option value="">Seviye seçiniz</option>
-                                    <option value="0">0 - Temel / Başlangıç</option>
-                                    <option value="1">1 - Orta Seviye (Kullanabilir)</option>
-                                    <option value="2">2 - İleri Seviye (Uzman)</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Cpp" class="form-label">C++</label>
-                                <select asp-for="Cpp" class="form-select custom-select">
-                                    <option value="">Seviye seçiniz</option>
-                                    <option value="0">0 - Temel / Başlangıç</option>
-                                    <option value="1">1 - Orta Seviye (Kullanabilir)</option>
-                                    <option value="2">2 - İleri Seviye (Uzman)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-12 text-center mt-4">
-                            <button type="submit" class="btn-primary-custom px-5 py-3 fs-5 w-100">
-                                <i class="me-2">⚡</i> Kariyerimi Analiz Et
+                        <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-lg px-5" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border: none; border-radius: 12px; font-weight: 600; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">
+                                ✨ Kariyerimi Analiz Et
                             </button>
                         </div>
                     </form>
@@ -186,114 +112,194 @@
             {
                 <div class="feature-card shadow-lg mt-5 fade-in-up delay-1" id="results">
                     <div class="card-body p-sm-5">
-                        
+
                         <div class="text-center mb-5">
                             <h2 class="hero-title fs-2 mb-3">Analiz Sonuçları</h2>
-                            <div class="d-inline-block px-4 py-3 rounded-4 mb-3" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);">
-                                <h3 class="fw-bold mb-0" style="color: #34d399;">Tahmin: @result.Prediction</h3>
+
+                            <div class="d-inline-block px-4 py-3 rounded-4 mb-3"
+                                 style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);">
+
+                                <h3 class="fw-bold mb-0" style="color: #34d399;">
+                                    Tahmin: @result.Tahmin
+                                </h3>
+
                             </div>
-                            <h5 class="fw-semibold text-light">Senin İçin En Uygun Alan: <span style="color: #67e8f9;">@result.MatchedArea</span></h5>
+
+                            <h5 class="fw-semibold text-light">
+                                Senin İçin En Uygun Alan:
+                                <span style="color: #67e8f9;">
+                                    @result.FirmaEslesmeAlani
+                                </span>
+                            </h5>
                         </div>
 
-                        @if (!string.IsNullOrEmpty(message))
-                        {
-                            <div class="alert alert-warning" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fcd34d;">
-                                @message
-                            </div>
-                        }
-                        else if (result.Companies != null && result.Companies.Any())
+                        @if (result.OnerilenFirmalar != null && result.OnerilenFirmalar.Any())
                         {
                             <h4 class="section-title mb-4">Önerilen Firmalar</h4>
+
                             <div class="row g-4">
-                                @foreach (var company in result.Companies)
+
+                                @foreach (var company in result.OnerilenFirmalar)
                                 {
                                     <div class="col-md-6">
-                                        <div class="result-card p-4 h-100 d-flex flex-column">
+
+                                        <div class="p-4 h-100 d-flex flex-column position-relative" style="background: rgba(30, 30, 47, 0.6); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease;">
+
                                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                                <div>
-                                                    <h4 class="fw-bold text-white mb-1">@company.Firma</h4>
-                                                    <span class="text-muted" style="color: #94a3b8 !important;">@company.IlgiliAlan</span>
+                                                <div class="pe-5">
+                                                    <h4 class="fw-bold text-white mb-2" style="font-size: 1.25rem;">
+                                                        @company.Firma
+                                                    </h4>
+                                                    <span class="badge" style="background: rgba(255,255,255,0.1); color: #cbd5e1; font-weight: normal; font-size: 0.85rem;">
+                                                        @company.Alan
+                                                    </span>
                                                 </div>
-                                                <div class="badge-score" style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2)); border: 1px solid rgba(255,255,255,0.1); color: #67e8f9;">
-                                                    <span class="fw-bold fs-5">@company.Score</span> <small>Puan</small>
+
+                                                <div class="position-absolute" style="top: 1.5rem; right: 1.5rem; text-align: center; background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2)); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 0.5rem 0.75rem; color: #67e8f9; min-width: 60px;">
+                                                    <span class="d-block fw-bold fs-5 lh-1 mb-1">
+                                                        @company.Score
+                                                    </span>
+                                                    <small class="d-block text-uppercase" style="font-size: 0.65rem; opacity: 0.8;">Puan</small>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="mt-auto pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
-                                                <span class="text-muted me-2" style="font-size: 0.9rem;">Eşleşme Durumu:</span>
-                                                @if (company.Durum == "Çok Uygun")
-                                                {
-                                                    <span class="badge bg-success px-3 py-2 fs-6">⭐ @company.Durum</span>
-                                                }
-                                                else if (company.Durum == "Uygun")
-                                                {
-                                                    <span class="badge bg-primary px-3 py-2 fs-6">👍 @company.Durum</span>
-                                                }
-                                                else if (company.Durum == "Kısmen Uygun")
-                                                {
-                                                    <span class="badge px-3 py-2 fs-6" style="background-color: #f59e0b; color: #fff;">🤔 @company.Durum</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-secondary px-3 py-2 fs-6">@company.Durum</span>
-                                                }
+
+                                            <div class="mt-auto pt-3" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <span class="text-light opacity-50" style="font-size: 0.85rem;">
+                                                        Eşleşme Durumu:
+                                                    </span>
+
+                                                    @if (company.Durum == "Çok Uygun")
+                                                    {
+                                                        <span class="badge px-3 py-2" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 500;">
+                                                            ⭐ @company.Durum
+                                                        </span>
+                                                    }
+                                                    else if (company.Durum == "Uygun")
+                                                    {
+                                                        <span class="badge px-3 py-2" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); font-weight: 500;">
+                                                            👍 @company.Durum
+                                                        </span>
+                                                    }
+                                                    else if (company.Durum == "Kısmen Uygun")
+                                                    {
+                                                        <span class="badge px-3 py-2" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 500;">
+                                                            🤔 @company.Durum
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge px-3 py-2" style="background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); font-weight: 500;">
+                                                            @company.Durum
+                                                        </span>
+                                                    }
+                                                </div>
                                             </div>
+
                                         </div>
+
                                     </div>
                                 }
+
                             </div>
                         }
                         else
                         {
-                            <div class="alert alert-info" style="background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #bae6fd;">
+                            <div class="alert alert-info"
+                                 style="background: rgba(56, 189, 248, 0.1);
+                                                border-color: rgba(56, 189, 248, 0.3);
+                                                color: #bae6fd;">
+
                                 Gösterilecek öneri bulunamadı.
+
                             </div>
                         }
 
                         @if (ViewBag.Roadmap != null)
                         {
                             var roadmap = ViewBag.Roadmap as List<string>;
+
                             if (roadmap != null && roadmap.Any())
                             {
-                                <div class="mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                                <div class="mt-5 pt-4"
+                                     style="border-top: 1px solid rgba(255,255,255,0.1);">
+
                                     <div class="text-center mb-4">
-                                        <div class="icon-wrapper mx-auto mb-2" style="width: 50px; height: 50px; font-size: 1.5rem;">🗺️</div>
-                                        <h3 class="fw-bold text-light">Kariyer Yol Haritası</h3>
-                                        <p class="text-muted">Önerilen alanda gelişmek için izlemen gereken adımlar</p>
+
+                                        <div class="icon-wrapper mx-auto mb-2"
+                                             style="width: 50px;
+                                                                height: 50px;
+                                                                font-size: 1.5rem;">
+                                            🗺️
+                                        </div>
+
+                                        <h3 class="fw-bold text-light">
+                                            Kariyer Yol Haritası
+                                        </h3>
+
+                                        <p class="text-muted">
+                                            Önerilen alanda gelişmek için izlemen gereken adımlar
+                                        </p>
+
                                     </div>
-                                    
+
                                     <div class="row g-3">
+
                                         @for (int i = 0; i < roadmap.Count; i++)
                                         {
                                             <div class="col-12">
-                                                <div class="d-flex align-items-center p-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; transition: transform 0.2s;">
-                                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2)); color: #67e8f9; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+
+                                                <div class="d-flex align-items-center p-3"
+                                                     style="background: rgba(255,255,255,0.03);
+                                                                            border: 1px solid rgba(255,255,255,0.1);
+                                                                            border-radius: 12px;
+                                                                            transition: transform 0.2s;">
+
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                         style="width: 40px;
+                                                                                height: 40px;
+                                                                                background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+                                                                                color: #67e8f9;
+                                                                                font-weight: bold;
+                                                                                font-size: 1.1rem;
+                                                                                flex-shrink: 0;">
+
                                                         @(i + 1)
+
                                                     </div>
+
                                                     <div class="text-light fs-6">
                                                         @roadmap[i]
                                                     </div>
+
                                                 </div>
+
                                             </div>
                                         }
+
                                     </div>
+
                                 </div>
                             }
                         }
+
                     </div>
                 </div>
-                
+
                 <script>
-                    // Scroll to results if present
-                    document.addEventListener("DOMContentLoaded", function() {
+                    document.addEventListener("DOMContentLoaded", function () {
+
                         const resultsEl = document.getElementById("results");
+
                         if (resultsEl) {
-                            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            resultsEl.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
                         }
                     });
                 </script>
             }
-
         </div>
     </div>
 </div>
