@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student, Company")]
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -84,6 +84,7 @@ namespace StajKariyerWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Apply(int companyId)
         {
             var currentUser = await _userManager.GetUserAsync(User);

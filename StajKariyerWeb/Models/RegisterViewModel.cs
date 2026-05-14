@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace StajKariyerWeb.Models
 {
@@ -20,5 +20,8 @@ namespace StajKariyerWeb.Models
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string UserType { get; set; } = "Student";
     }
 }

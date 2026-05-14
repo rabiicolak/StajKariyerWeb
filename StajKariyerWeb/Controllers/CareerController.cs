@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace StajKariyerWeb.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Student")]
     public class CareerController : Controller
     {
         private readonly ApiService _apiService;

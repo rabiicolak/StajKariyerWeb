@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class RoadmapController : Controller
     {
         [HttpGet]

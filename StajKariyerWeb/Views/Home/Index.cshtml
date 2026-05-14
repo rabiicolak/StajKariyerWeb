@@ -5,7 +5,7 @@
 
 @if (User.Identity != null && User.Identity.IsAuthenticated && Model != null)
 {
-    <div class="container pb-5 fade-in-up">
+    <div class="container pb-5 fade-in-up" style="padding-top: 80px;">
         <h2 class="mb-4 fw-bold">Merhaba @Model.FullName, <span style="color: var(--secondary-color);">tekrar hoş geldin! 👋</span></h2>
         
         <div class="row g-4">

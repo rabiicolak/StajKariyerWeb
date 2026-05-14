@@ -63,6 +63,20 @@
                     <div asp-validation-summary="All" class="text-danger mb-3" style="color: #ffb3b8 !important;"></div>
 
                     <div class="mb-4">
+                        <label class="form-label d-block">Hesap Tipi</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="UserType" value="Student" id="roleStudent" checked>
+                                <label class="form-check-label" for="roleStudent" style="color: #f8fafc;">Öğrenci</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="UserType" value="Company" id="roleCompany">
+                                <label class="form-check-label" for="roleCompany" style="color: #f8fafc;">Firma</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
                         <label asp-for="FullName" class="form-label"></label>
                         <input asp-for="FullName" class="form-control custom-input" placeholder="Ad Soyad" />
                         <span asp-validation-for="FullName" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>

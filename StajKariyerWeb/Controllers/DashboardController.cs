@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;

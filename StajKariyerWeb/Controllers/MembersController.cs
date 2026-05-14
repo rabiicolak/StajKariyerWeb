@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class MembersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,10 +36,11 @@ namespace StajKariyerWeb.Controllers
 
             var currentUserMostRecommended = await GetMostRecommendedArea(currentUserId!);
 
-            var otherUsers = await _userManager.Users
+            var studentUsers = await _userManager.GetUsersInRoleAsync("Student");
+            var otherUsers = studentUsers
                 .Where(u => u.Id != currentUserId)
                 .OrderBy(u => u.FullName)
-                .ToListAsync();
+                .ToList();
 
             var similarMembers = new List<SimilarMemberDto>();
             var allOtherMembers = new List<ApplicationUser>();

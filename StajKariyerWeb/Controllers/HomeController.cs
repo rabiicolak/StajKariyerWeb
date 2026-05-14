@@ -79,11 +79,12 @@ namespace StajKariyerWeb.Controllers
                         viewModel.ProfileCompletionPercentage = (int)((filledFields / (double)totalFields) * 100);
 
                         // Rastgele 3 Üye Getirme
-                        var randomMembers = await _context.Users
+                        var studentUsers = await _userManager.GetUsersInRoleAsync("Student");
+                        var randomMembers = studentUsers
                                                 .Where(u => u.Id != userId)
                                                 .OrderBy(u => Guid.NewGuid())
                                                 .Take(3)
-                                                .ToListAsync();
+                                                .ToList();
                                                 
                         viewModel.RecommendedMembers = randomMembers;
 

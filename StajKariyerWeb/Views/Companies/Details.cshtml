@@ -1,5 +1,5 @@
+@using System.Security.Claims
 @model StajKariyerWeb.Models.CompanyDetailsViewModel
-
 @{
     ViewData["Title"] = Model.Company.Name + " - Firma Profili";
 }
@@ -52,20 +52,29 @@
                             }
 
                             <div class="mt-4">
-                                @if (Model.HasApplied)
+                                @if (User.IsInRole("Student"))
                                 {
-                                    <button class="btn w-100" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;" disabled>
-                                        ✅ Başvuru Yapıldı
-                                    </button>
-                                }
-                                else
-                                {
-                                    <form asp-action="Apply" method="post">
-                                        <input type="hidden" name="companyId" value="@Model.Company.Id" />
-                                        <button type="submit" class="btn w-100" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; border: none; border-radius: 8px; font-weight: 500; padding: 0.8em; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">
-                                            🚀 Bu Firmaya Başvur
+                                    @if (Model.HasApplied)
+                                    {
+                                        <button class="btn w-100" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;" disabled>
+                                            ✅ Başvuru Yapıldı
                                         </button>
-                                    </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="Apply" method="post">
+                                            <input type="hidden" name="companyId" value="@Model.Company.Id" />
+                                            <button type="submit" class="btn w-100" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; border: none; border-radius: 8px; font-weight: 500; padding: 0.8em; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">
+                                                🚀 Bu Firmaya Başvur
+                                            </button>
+                                        </form>
+                                    }
+                                }
+                                else if (User.IsInRole("Company") && Model.Company.ApplicationUserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                {
+                                    <a href="/Account/EditCompanyProfile" class="btn w-100" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; font-weight: 500; padding: 0.8em;">
+                                        ⚙️ Firma Profilini Düzenle
+                                    </a>
                                 }
                                 @if (TempData["SuccessMessage"] != null)
                                 {

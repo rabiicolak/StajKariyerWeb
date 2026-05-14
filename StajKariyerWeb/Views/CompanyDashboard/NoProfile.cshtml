@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Firma Profili Bulunamadı";
+}
+
+<div class="container mt-5 pt-5 fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="feature-card shadow-lg p-5 text-center" style="border: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="mb-4">
+                    <span style="font-size: 4rem;">🏢</span>
+                </div>
+                <h2 class="fw-bold hero-title mb-3" style="background: linear-gradient(to right, #ffffff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Firma Profiliniz Bulunamadı</h2>
+                
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p class="text-muted fs-5 mb-4" style="color: #cbd5e1 !important;">@ViewBag.ErrorMessage</p>
+                }
+                else
+                {
+                    <p class="text-muted fs-5 mb-4" style="color: #cbd5e1 !important;">
+                        Sisteme kayıtlı firma profiliniz bulunmamaktadır. İşlemlerinize devam edebilmek için lütfen yönetici ile iletişime geçin.
+                    </p>
+                }
+
+                <a href="/Home/Index" class="btn-primary-custom px-5 py-2 mt-2" style="text-decoration: none; display: inline-block;">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

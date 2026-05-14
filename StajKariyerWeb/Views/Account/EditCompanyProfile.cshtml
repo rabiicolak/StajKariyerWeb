@@ -1,0 +1,120 @@
+@model StajKariyerWeb.Models.EditCompanyProfileViewModel
+
+@{
+    ViewData["Title"] = "Firma Profilini Düzenle";
+}
+
+<style>
+    .custom-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .custom-input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #fcd34d;
+        color: #fff;
+        box-shadow: 0 0 0 0.25rem rgba(245, 158, 11, 0.25);
+    }
+    .custom-input::placeholder {
+        color: #94a3b8;
+    }
+    .form-label {
+        color: #cbd5e1;
+        font-weight: 500;
+    }
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(16, 185, 129, 0.2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+</style>
+
+<div class="row justify-content-center mt-5 mb-5 fade-in-up" style="padding-top: 80px;">
+    <div class="col-md-8 col-lg-7">
+        <div class="feature-card shadow-lg p-sm-4">
+            <div class="card-body">
+                <div class="card-icon">🏢</div>
+                <h2 class="text-center fw-bold hero-title fs-3 mb-2" style="background: linear-gradient(to right, #ffffff, #fcd34d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Firma Profilini Düzenle</h2>
+                <p class="text-center text-muted mb-4" style="color: #94a3b8 !important;">Firma detaylarınızı, aranılan yetkinlikleri ve sektör bilgilerinizi güncelleyin.</p>
+
+                <form asp-action="EditCompanyProfile" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="color: #ffb3b8 !important;"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control custom-input" placeholder="Firma Adı" />
+                            <span asp-validation-for="Name" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Sector" class="form-label"></label>
+                            <input asp-for="Sector" class="form-control custom-input" placeholder="Sektör (Örn: Yazılım, Finans)" />
+                            <span asp-validation-for="Sector" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="RelatedArea" class="form-label"></label>
+                            <input asp-for="RelatedArea" class="form-control custom-input" placeholder="İlgili Alan (Örn: Veri Bilimi)" />
+                            <span asp-validation-for="RelatedArea" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="City" class="form-label"></label>
+                            <input asp-for="City" class="form-control custom-input" placeholder="Şehir" />
+                            <span asp-validation-for="City" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="WebsiteUrl" class="form-label"></label>
+                        <input asp-for="WebsiteUrl" class="form-control custom-input" placeholder="https://firma-websitesi.com" />
+                        <span asp-validation-for="WebsiteUrl" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="RequiredSkills" class="form-label"></label>
+                        <input asp-for="RequiredSkills" class="form-control custom-input" placeholder="C#, SQL, ASP.NET Core" />
+                        <span asp-validation-for="RequiredSkills" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        <small class="text-muted" style="color: #94a3b8 !important; display: block; margin-top: 0.25rem;">Lütfen yetkinlikleri virgülle ayırarak yazın.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control custom-input" rows="4" placeholder="Firmanızın çalışma kültürü, misyonu ve stajyer/çalışan adaylarından beklentileri hakkında kısaca bilgi verin..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Logo" class="form-label"></label>
+                        <input asp-for="Logo" type="file" class="form-control custom-input" accept=".jpg,.jpeg,.png" />
+                        <span asp-validation-for="Logo" class="text-danger" style="font-size: 0.85em; color: #ffb3b8 !important;"></span>
+                        @if (!string.IsNullOrEmpty(Model.ExistingLogoPath))
+                        {
+                            <div class="mt-2 text-muted" style="font-size: 0.85rem;">Mevcut Logo Yüklü</div>
+                        }
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a href="/CompanyDashboard/Index" class="btn btn-outline-secondary px-4" style="border-radius: 12px; padding: 0.8rem 1rem; color: #cbd5e1; border-color: rgba(255,255,255,0.2);">İptal</a>
+                        <button type="submit" class="btn px-4" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 12px; font-weight: 600; padding: 0.8rem 1rem; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
+                            Değişiklikleri Kaydet
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

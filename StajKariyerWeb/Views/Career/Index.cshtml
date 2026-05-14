@@ -35,12 +35,13 @@
                             <!-- GNO -->
                             <div class="col-md-6">
                                 <label asp-for="GNO" class="form-label text-light fw-semibold">Genel Not Ortalaması (GNO)</label>
-                                <input asp-for="GNO" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: 3.5" step="0.01" />
+                                <input asp-for="GNO" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" placeholder="Örn: 2.75 veya 3.40" step="0.01" />
+                                <small class="text-muted" style="color: #94a3b8 !important; display: block; margin-top: 0.25rem;">4.00 üzerinden genel not ortalamanızı giriniz.</small>
                             </div>
 
                             <!-- Ilgili_Alan -->
                             <div class="col-md-6">
-                                <label asp-for="Ilgili_Alan" class="form-label text-light fw-semibold">İlgilendiğin Alan</label>
+                                <label asp-for="Ilgili_Alan" class="form-label text-light fw-semibold">İlgi Duyduğun Kariyer Alanı</label>
                                 <select asp-for="Ilgili_Alan" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
                                     <option value="" style="color: black;">Seçiniz...</option>
                                     <option value="Web" style="color: black;">Web Geliştirme</option>
@@ -54,10 +55,10 @@
 
                             <!-- Proje -->
                             <div class="col-md-6">
-                                <label asp-for="Proje" class="form-label text-light fw-semibold">Daha Önce Proje Yaptın mı?</label>
+                                <label asp-for="Proje" class="form-label text-light fw-semibold">Proje Deneyimi</label>
                                 <select asp-for="Proje" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-                                    <option value="1" style="color: black;">Evet</option>
-                                    <option value="0" style="color: black;">Hayır</option>
+                                    <option value="1" style="color: black;">Evet, proje geliştirdim</option>
+                                    <option value="0" style="color: black;">Hayır, henüz deneyimim yok</option>
                                 </select>
                             </div>
 
@@ -65,37 +66,54 @@
                             <div class="col-md-6">
                                 <label asp-for="Veritabani" class="form-label text-light fw-semibold">Veritabanı Bilgisi</label>
                                 <select asp-for="Veritabani" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-                                    <option value="1" style="color: black;">Var</option>
-                                    <option value="0" style="color: black;">Yok</option>
+                                    <option value="0" style="color: black;">Başlangıç</option>
+                                    <option value="1" style="color: black;">Orta</option>
+                                    <option value="2" style="color: black;">İleri</option>
                                 </select>
                             </div>
 
                             <div class="col-12 mt-4">
-                                <h5 class="fw-bold mb-3 text-light" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Programlama Dili Yetkinlikleri (0-100)</h5>
+                                <h5 class="fw-bold mb-3 text-light" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Teknik Yetkinlik Seviyeleri</h5>
                             </div>
 
                             <!-- Python -->
                             <div class="col-md-6">
                                 <label asp-for="Python" class="form-label text-light opacity-75">Python</label>
-                                <input asp-for="Python" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                                <select asp-for="Python" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="0" style="color: black;">Başlangıç</option>
+                                    <option value="1" style="color: black;">Orta</option>
+                                    <option value="2" style="color: black;">İleri</option>
+                                </select>
                             </div>
 
                             <!-- Java -->
                             <div class="col-md-6">
                                 <label asp-for="Java" class="form-label text-light opacity-75">Java</label>
-                                <input asp-for="Java" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                                <select asp-for="Java" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="0" style="color: black;">Başlangıç</option>
+                                    <option value="1" style="color: black;">Orta</option>
+                                    <option value="2" style="color: black;">İleri</option>
+                                </select>
                             </div>
 
                             <!-- Csharp -->
                             <div class="col-md-6">
                                 <label asp-for="Csharp" class="form-label text-light opacity-75">C#</label>
-                                <input asp-for="Csharp" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                                <select asp-for="Csharp" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="0" style="color: black;">Başlangıç</option>
+                                    <option value="1" style="color: black;">Orta</option>
+                                    <option value="2" style="color: black;">İyi / Çok İyi</option>
+                                </select>
                             </div>
 
                             <!-- Cpp -->
                             <div class="col-md-6">
                                 <label asp-for="Cpp" class="form-label text-light opacity-75">C++</label>
-                                <input asp-for="Cpp" type="number" class="form-control" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;" min="0" max="100" />
+                                <select asp-for="Cpp" class="form-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+                                    <option value="0" style="color: black;">Başlangıç</option>
+                                    <option value="1" style="color: black;">Orta</option>
+                                    <option value="2" style="color: black;">İyi / Çok İyi</option>
+                                </select>
                             </div>
                         </div>
 

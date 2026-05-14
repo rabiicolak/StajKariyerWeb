@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class ApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;

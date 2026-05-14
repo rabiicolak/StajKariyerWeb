@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-
+using System.Security.Claims;
 namespace StajKariyerWeb.Controllers
 {
     public class AccountController : Controller
@@ -15,15 +15,18 @@ namespace StajKariyerWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IWebHostEnvironment _env;
+        private readonly StajKariyerWeb.Data.ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IWebHostEnvironment env)
+            IWebHostEnvironment env,
+            StajKariyerWeb.Data.ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = env;
+            _context = context;
         }
 
         [HttpGet]
@@ -46,6 +49,11 @@ namespace StajKariyerWeb.Controllers
 
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null && await _userManager.IsInRoleAsync(user, "Company"))
+                {
+                    return RedirectToAction("Index", "CompanyDashboard");
+                }
                 return RedirectToAction("Index", "Dashboard");
             }
 
@@ -76,7 +84,26 @@ namespace StajKariyerWeb.Controllers
 
             if (result.Succeeded)
             {
+                var role = model.UserType == "Company" ? "Company" : "Student";
+                await _userManager.AddToRoleAsync(user, role);
+
+                if (role == "Company")
+                {
+                    var companyProfile = new CompanyProfile
+                    {
+                        Name = model.FullName,
+                        ApplicationUserId = user.Id
+                    };
+                    _context.CompanyProfiles.Add(companyProfile);
+                    await _context.SaveChangesAsync();
+                }
+
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                
+                if (role == "Company")
+                {
+                    return RedirectToAction("Index", "CompanyDashboard");
+                }
                 return RedirectToAction("Index", "Dashboard");
             }
 
@@ -93,6 +120,19 @@ namespace StajKariyerWeb.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                return RedirectToAction("Login");
+            }
+            if (User.IsInRole("Company"))
+                return RedirectToAction("Index", "CompanyDashboard");
+                
+            return RedirectToAction("Index", "Dashboard");
         }
 
         [HttpGet]
@@ -113,6 +153,10 @@ namespace StajKariyerWeb.Controllers
             if (User.Identity?.IsAuthenticated != true)
             {
                 return RedirectToAction("Login", "Account");
+            }
+            if (User.IsInRole("Company"))
+            {
+                return RedirectToAction("EditCompanyProfile");
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -139,6 +183,10 @@ namespace StajKariyerWeb.Controllers
             if (User.Identity?.IsAuthenticated != true)
             {
                 return RedirectToAction("Login", "Account");
+            }
+            if (User.IsInRole("Company"))
+            {
+                return RedirectToAction("EditCompanyProfile");
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -226,6 +274,105 @@ namespace StajKariyerWeb.Controllers
             model.ExistingProfilePhotoPath = user.ProfilePhotoPath;
             model.ExistingCVPath = user.CVPath;
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditCompanyProfile()
+        {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!User.IsInRole("Company"))
+            {
+                return RedirectToAction("EditProfile");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var company = _context.CompanyProfiles.FirstOrDefault(c => c.ApplicationUserId == userId);
+            
+            if (company == null)
+            {
+                return RedirectToAction("Index", "CompanyDashboard");
+            }
+
+            var model = new EditCompanyProfileViewModel
+            {
+                Name = company.Name,
+                Sector = company.Sector,
+                RelatedArea = company.RelatedArea,
+                City = company.City,
+                Description = company.Description,
+                WebsiteUrl = company.WebsiteUrl,
+                RequiredSkills = company.RequiredSkills,
+                ExistingLogoPath = company.LogoPath
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCompanyProfile(EditCompanyProfileViewModel model)
+        {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!User.IsInRole("Company"))
+            {
+                return RedirectToAction("EditProfile");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var company = _context.CompanyProfiles.FirstOrDefault(c => c.ApplicationUserId == userId);
+
+            if (company == null) return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                model.ExistingLogoPath = company.LogoPath;
+                return View(model);
+            }
+
+            company.Name = model.Name;
+            company.Sector = model.Sector;
+            company.RelatedArea = model.RelatedArea;
+            company.City = model.City;
+            company.Description = model.Description;
+            company.WebsiteUrl = model.WebsiteUrl;
+            company.RequiredSkills = model.RequiredSkills;
+
+            // Logo Upload
+            if (model.Logo != null && model.Logo.Length > 0)
+            {
+                var ext = Path.GetExtension(model.Logo.FileName).ToLowerInvariant();
+                if (ext != ".jpg" && ext != ".jpeg" && ext != ".png")
+                {
+                    ModelState.AddModelError("Logo", "Sadece jpg, jpeg ve png dosyaları yüklenebilir.");
+                    model.ExistingLogoPath = company.LogoPath;
+                    return View(model);
+                }
+
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "company-logos");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + ext;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Logo.CopyToAsync(fileStream);
+                }
+
+                company.LogoPath = "/uploads/company-logos/" + uniqueFileName;
+            }
+
+            _context.CompanyProfiles.Update(company);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Firma profili başarıyla güncellendi.";
+            return RedirectToAction("Index", "CompanyDashboard");
         }
     }
 }

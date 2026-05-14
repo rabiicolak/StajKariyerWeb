@@ -2,6 +2,21 @@
 
 @{
     ViewData["Title"] = "Firma Dashboard - " + Model.Company.Name;
+
+    int totalCompanyFields = 6;
+    int filledCompanyFields = 0;
+    if (!string.IsNullOrEmpty(Model.Company.Sector)) filledCompanyFields++;
+    if (!string.IsNullOrEmpty(Model.Company.City)) filledCompanyFields++;
+    if (!string.IsNullOrEmpty(Model.Company.RelatedArea)) filledCompanyFields++;
+    if (!string.IsNullOrEmpty(Model.Company.Description)) filledCompanyFields++;
+    if (!string.IsNullOrEmpty(Model.Company.WebsiteUrl)) filledCompanyFields++;
+    if (!string.IsNullOrEmpty(Model.Company.LogoPath)) filledCompanyFields++;
+    int companyProfileCompletion = (int)((filledCompanyFields / (double)totalCompanyFields) * 100);
+
+    int pendingApps = Model.JobApplications.Count(j => j.Status == "Beklemede");
+    int reviewedApps = Model.JobApplications.Count(j => j.Status == "İncelendi");
+    int acceptedApps = Model.JobApplications.Count(j => j.Status == "Kabul");
+    int rejectedApps = Model.JobApplications.Count(j => j.Status == "Reddedildi");
 }
 
 <div class="container mt-5 mb-5 fade-in-up">
@@ -115,6 +130,58 @@
                     @TempData["SuccessMessage"]
                 </div>
             }
+
+            <!-- Profil Durumu ve Başvuru İstatistikleri -->
+            <div class="row g-4 mb-5">
+                <!-- Firma Profil Durumu -->
+                <div class="col-md-6">
+                    <div class="card border-0 h-100" style="background: rgba(30, 30, 47, 0.6); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05) !important;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold text-white mb-0">Firma Profil Durumu</h5>
+                                <span style="color: #67e8f9; font-weight: bold;">%@companyProfileCompletion</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 0.8rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 10px;">
+                                <div class="progress-bar" role="progressbar" style="width: @companyProfileCompletion%; background: linear-gradient(to right, #6366f1, #06b6d4);" aria-valuenow="@companyProfileCompletion" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            @if (companyProfileCompletion < 100)
+                            {
+                                <p class="text-muted mb-3" style="font-size: 0.85rem;">Firma bilgilerinizi tamamlarsanız öğrencilere daha kurumsal görünürsünüz ve eşleşme oranınız artar.</p>
+                                <a href="/Account/EditCompanyProfile" class="btn btn-sm w-100" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px;">Profili Tamamla</a>
+                            }
+                            else
+                            {
+                                <p class="text-success mb-0" style="font-size: 0.85rem;">✅ Profiliniz %100 dolu. Harika görünüyorsunuz!</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Başvuru Dağılımı -->
+                <div class="col-md-6">
+                    <div class="card border-0 h-100" style="background: rgba(30, 30, 47, 0.6); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05) !important;">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-white mb-4">Başvuru Dağılımı</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-light opacity-75" style="font-size: 0.9rem;">⏳ Beklemede</span>
+                                <span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2);">@pendingApps</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-light opacity-75" style="font-size: 0.9rem;">🔍 İncelendi</span>
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2);">@reviewedApps</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-light opacity-75" style="font-size: 0.9rem;">✅ Kabul</span>
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">@acceptedApps</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-light opacity-75" style="font-size: 0.9rem;">❌ Reddedildi</span>
+                                <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2);">@rejectedApps</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Gelen Başvurular -->
             <div class="mb-5">

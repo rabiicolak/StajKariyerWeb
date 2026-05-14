@@ -23,5 +23,8 @@ namespace StajKariyerWeb.Models
         public string? RequiredSkills { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
     }
 }

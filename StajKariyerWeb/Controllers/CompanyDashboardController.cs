@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StajKariyerWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Company")]
     public class CompanyDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,17 +28,27 @@ namespace StajKariyerWeb.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(
-            int companyId = 1,
+            int? companyId = null,
             string? filterCity = null,
             string? filterDepartment = null,
             string? filterRelatedArea = null,
             int? filterMinScore = null)
         {
-            var company = await _context.CompanyProfiles.FindAsync(companyId);
+            CompanyProfile? company = null;
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (companyId.HasValue)
+            {
+                company = await _context.CompanyProfiles.FindAsync(companyId.Value);
+            }
+            else if (currentUser != null)
+            {
+                company = await _context.CompanyProfiles.FirstOrDefaultAsync(c => c.ApplicationUserId == currentUser.Id);
+            }
 
             if (company == null)
             {
-                return NotFound();
+                return View("NoProfile");
             }
 
             var allUsers = await _userManager.Users.ToListAsync();
@@ -101,7 +111,7 @@ namespace StajKariyerWeb.Controllers
             var jobApplications = await _context.JobApplications
                 .Include(j => j.Student)
                 .Include(j => j.CompanyProfile)
-                .Where(j => j.CompanyProfileId == companyId)
+                .Where(j => j.CompanyProfileId == company.Id)
                 .OrderByDescending(j => j.ApplicationDate)
                 .ToListAsync();
 
@@ -126,7 +136,7 @@ namespace StajKariyerWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateApplicationStatus(int applicationId, string newStatus, int companyId)
+        public async Task<IActionResult> UpdateApplicationStatus(int applicationId, string newStatus, int? companyId)
         {
             var application = await _context.JobApplications.FindAsync(applicationId);
             
